@@ -1,0 +1,9 @@
+<h1>銘柄詳細</h1>
+
+<h1>銘柄: <%= @sake.brand %></h1>
+<p>ID: <%= @sake.id %></p>
+<p>さけのわID: <%= @sake.sakenowaId %></p>
+<p>酒造: <%= @sake.brewery %></p>
+<p>都道府県: <%= @sake.prefecture %></p> 
+
+<%= link_to 'レビューを作成', new_sake_review_path(@sake), class: 'btn btn-primary' %>

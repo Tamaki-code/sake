@@ -1,0 +1,11 @@
+<h1>日本酒一覧</h1>
+
+<% if @sakes.any? %>
+  <ul>
+    <% @sakes.each do |sake| %>
+      <li><%= link_to sake.brand, sake_path(sake) %></li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>該当する日本酒が見つかりませんでした。</p>
+<% end %>

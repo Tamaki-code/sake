@@ -1,0 +1,67 @@
+<h1>レビューの新規作成</h1>
+
+<%= form_with(model: [@sake, @review], local: true) do |form| %>
+  <div class="field">
+    <%= form.label :rating, "評価 (0.5刻みの星評価)" %><br>
+    <%= form.number_field :rating, step: 0.5, min: 0, max: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :sweetness, "甘さ (数値選択バー)" %><br>
+    <%= form.range_field :sweetness, step: 0.1, min: 0, max: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :spiciness, "辛さ (数値選択バー)" %><br>
+    <%= form.range_field :spiciness, step: 0.1, min: 0, max: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :lightness, "淡白さ (数値選択バー)" %><br>
+    <%= form.range_field :lightness, step: 0.1, min: 0, max: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :richness, "濃醇さ (数値選択バー)" %><br>
+    <%= form.range_field :richness, step: 0.1, min: 0, max: 5 %>
+  </div>
+
+  <div class="field">
+    <%= form.label :aroma, "香り" %><br>
+    <%= form.text_field :aroma %>
+  </div>
+
+  <div class="field">
+    <%= form.label :aftertaste, "後味" %><br>
+    <%= form.text_field :aftertaste %>
+  </div>
+
+  <div class="field">
+    <%= form.label :drinking_style, "飲み方" %><br>
+    <%= form.text_field :drinking_style %>
+  </div>
+
+  <div class="field">
+    <%= form.label :matching_food, "合う食事" %><br>
+    <%= form.text_field :matching_food %>
+  </div>
+
+  <div class="field">
+    <%= form.label :comment, "コメント" %><br>
+    <%= form.text_area :comment %>
+  </div>
+
+  <div class="field">
+    <%= form.label :image, "画像" %><br>
+    <%= form.text_field :image %>
+  </div>
+
+  <div class="field">
+    <%= form.label :recorded_at, "記録日" %><br>
+    <%= form.date_select :recorded_at %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "レビューを投稿" %>
+  </div>
+<% end %>

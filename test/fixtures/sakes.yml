@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sakenowaId: MyString
+  brand: MyString
+  brewery: MyString
+  prefecture: MyString
+
+two:
+  sakenowaId: MyString
+  brand: MyString
+  brewery: MyString
+  prefecture: MyString

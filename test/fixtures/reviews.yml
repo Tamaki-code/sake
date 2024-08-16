@@ -1,0 +1,33 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  sake: one
+  rating: 1
+  sweetness: 9.99
+  spiciness: 9.99
+  lightness: 9.99
+  richness: 9.99
+  aroma: MyString
+  aftertaste: MyString
+  drinking_style: MyString
+  matching_food: MyString
+  comment: MyText
+  image: MyString
+  recorded_at: 2024-08-13
+
+two:
+  user: two
+  sake: two
+  rating: 1
+  sweetness: 9.99
+  spiciness: 9.99
+  lightness: 9.99
+  richness: 9.99
+  aroma: MyString
+  aftertaste: MyString
+  drinking_style: MyString
+  matching_food: MyString
+  comment: MyText
+  image: MyString
+  recorded_at: 2024-08-13

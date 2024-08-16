@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Sakelog</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="bg-black text-silver">
+    <header class="flex justify-between items-center p-4 bg-black text-silver border-b border-silver">
+      <div class="flex-1 text-left">
+        <%= link_to 'SakeApp', root_path, class: 'text-silver no-underline hover:underline' %>
+      </div>
+      <div class="flex-1 text-right">
+        <% if user_signed_in? %>
+          <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'text-silver no-underline hover:underline' %>
+        <% else %>
+          <%= link_to 'ログイン', new_user_session_path, class: 'text-silver no-underline hover:underline' %>
+        <% end %>
+      </div>
+    </header>
+    <%= yield %>
+  </body>
+</html>
