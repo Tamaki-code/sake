@@ -2,6 +2,12 @@ class ReviewsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_sake
 
+  def index
+    @sake = Sake.find(params[:sake_id])
+    @reviews = @sake.reviews
+  end
+  
+
   def new
     @review = @sake.reviews.new
   end
@@ -9,6 +15,7 @@ class ReviewsController < ApplicationController
   def create
     @review = @sake.reviews.new(review_params)
     @review.user = current_user
+    Rails.logger.debug("current_user: #{current_user.inspect}")
     if @review.save
       redirect_to @sake, notice: 'レビューが作成されました。'
     else

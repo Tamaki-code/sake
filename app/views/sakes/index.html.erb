@@ -3,7 +3,7 @@
 <% if @sakes.any? %>
   <ul>
     <% @sakes.each do |sake| %>
-      <li><%= link_to sake.brand, sake_path(sake) %></li>
+      <li><%= link_to sake.brand, sake_path(sake, return_to: request.fullpath) %></li>
     <% end %>
   </ul>
 <% else %>

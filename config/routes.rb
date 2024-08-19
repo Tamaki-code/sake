@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :users, only: [:show, :edit, :update]
 
   resources :sakes, only: [:index, :show] do
-    resources :reviews, only: [:new, :create, :edit, :update, :destroy]
+    resources :reviews, only: [:index, :new, :create, :edit, :update, :destroy]
     collection do
       post :fetch_sake_data
     end

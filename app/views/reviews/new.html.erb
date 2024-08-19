@@ -1,6 +1,7 @@
 <h1>レビューの新規作成</h1>
 
 <%= form_with(model: [@sake, @review], local: true) do |form| %>
+  <%= form.hidden_field :sake_id, value: @sake.id %>
   <div class="field">
     <%= form.label :rating, "評価 (0.5刻みの星評価)" %><br>
     <%= form.number_field :rating, step: 0.5, min: 0, max: 5 %>
@@ -53,7 +54,7 @@
 
   <div class="field">
     <%= form.label :image, "画像" %><br>
-    <%= form.text_field :image %>
+    <%= form.file_field :image %>
   </div>
 
   <div class="field">
@@ -65,3 +66,5 @@
     <%= form.submit "レビューを投稿" %>
   </div>
 <% end %>
+
+<%= link_to '銘柄詳細に戻る', sake_path(@sake), class: 'btn btn-secondary' %>

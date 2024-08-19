@@ -16,17 +16,17 @@
 
  body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #030303;
-  color: #C0C0C0;
+  background-color: #f5f2eb;
+  color: #b39059;
 }
 
 header {
-  border-bottom: 1px solid #C0C0C0;
+  border-bottom: 1px solid #b39059;
 }
 
 input[type="text"] {
   border: 1px solid #C0C0C0;
-  background-color: #000000;
+  background-color: #ffffff;
   color: #C0C0C0;
   border-radius: 4px;
   padding-left: 2.5rem;
@@ -43,7 +43,7 @@ button:hover {
 }
 
 a {
-  color: #C0C0C0;
+  color: #b39059;
   text-decoration: none;
 }
 
@@ -52,19 +52,19 @@ a:hover {
 }
 
 .bg-black {
-  background-color: #030303;
+  background-color: #f5f2eb;
 }
 
 .text-silver {
-  color: #C0C0C0;
+  color: #b39059;
 }
 
 .border-silver {
-  border-color: #C0C0C0;
+  border-color: #b39059;
 }
 
 .bg-silver {
-  background-color: #C0C0C0;
+  background-color: #b39059;
 }
 
 .text-black {
@@ -102,31 +102,32 @@ a:hover {
 
 /* 検索窓のスタイル */
 .search-container {
-  position: relative;
-  width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
+  display: flex;                /* フレックスボックスレイアウトに設定 */
+  justify-content: center;      /* コンテンツを中央に配置 */
+  /* align-items: center;           */
+  /* 垂直方向のセンタリング */
+  width: 100%;                  /* 親要素の幅を占有 */
+  max-width: 400px;             /* 最大幅を設定 */
+  margin: 0 auto;               /* 中央寄せ */
 }
 
 .search-container input[type="text"] {
-  width: 100%;
-  padding: 10px 20px 10px 40px;
-  border: 1px solid #C0C0C0;
-  border-radius: 4px;
-  background-color: #000000;
-  color: #C0C0C0;
+  width: 100%;                  /* インプット要素の幅を設定 */
+  padding: 10px 20px;           /* パディングを設定 */
+  border: 1px solid #b39059;    /* 境界線の色を設定 */
+  background-color: #fff;       /* 背景色を設定 */
+  color: #b39059;               /* テキストの色を設定 */
+  display:inline-block;
 }
 
 .search-container button {
-  position: absolute;
-  top: 50%;
-  left: 10px;
-  transform: translateY(-50%);
-  background: none;
-  border: none;
-  color: #C0C0C0;
-  font-size: 16px;
-  cursor: pointer;
+  background: none;             /* 背景なし */
+  border: none;                 /* 境界線なし */
+  color: #b39059;               /* テキストの色 */
+  font-size: 20px;              /* フォントサイズ */
+  cursor: pointer;              /* カーソルをポインターに */
+  margin-left: 10px;            /* 左の余白を設定 */
+  display:inline-block;
 }
 
 .search-container button svg {

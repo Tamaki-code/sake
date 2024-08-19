@@ -1,0 +1,31 @@
+<h3><%= @sake.brand %> のレビュー一覧</h3>
+
+<% if @reviews.any? %>
+  <% @reviews.each do |review| %>
+    <div class="review">
+      <p><strong>評価:</strong> <%= review.rating %> / 5</p>
+      <p><strong>甘さ:</strong> <%= review.sweetness %></p>
+      <p><strong>辛さ:</strong> <%= review.spiciness %></p>
+      <p><strong>淡白さ:</strong> <%= review.lightness %></p>
+      <p><strong>濃醇さ:</strong> <%= review.richness %></p>
+      <p><strong>香り:</strong> <%= review.aroma %></p>
+      <p><strong>後味:</strong> <%= review.aftertaste %></p>
+      <p><strong>飲み方:</strong> <%= review.drinking_style %></p>
+      <p><strong>合う食事:</strong> <%= review.matching_food %></p>
+      <p><strong>コメント:</strong> <%= review.comment %></p>
+      <% if @review.present? && @review.image.attached? %>
+        <%= image_tag @review.image %>
+      <% else %>
+        <p>画像がありません。</p>
+      <% end %>
+
+      <p><strong>記録日:</strong> <%= review.recorded_at %></p>
+    </div>
+    <hr>
+  <% end %>
+<% else %>
+  <p>この酒に関するレビューはまだありません。</p>
+<% end %>
+
+<%= link_to 'レビューを作成する', new_sake_review_path(@sake), class: 'btn btn-primary' %>
+<%= link_to '銘柄詳細に戻る', sake_path(@sake), class: 'btn btn-secondary' %>
