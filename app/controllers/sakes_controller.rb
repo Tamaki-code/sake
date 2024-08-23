@@ -15,7 +15,7 @@ class SakesController < ApplicationController
 
   def search
     @sakes = if params[:query].present?
-               Sake.where('brand LIKE ?', "%#{params[:query]}%")
+               Sake.where('name LIKE ?', "%#{params[:query]}%")
              else
                Sake.all
              end

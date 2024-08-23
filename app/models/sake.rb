@@ -1,5 +1,7 @@
 class Sake < ApplicationRecord
   has_many :reviews
+  belongs_to :brewery
+  validates :sakenowaId, presence: true, uniqueness: true
   include HTTParty
   base_uri 'https://muro.sakenowa.com/sakenowa-data'  # APIのベースURL
 
@@ -10,7 +12,7 @@ class Sake < ApplicationRecord
       response['brands'].each do |sake_data|
         Sake.create(
           sakenowaId: sake_data['id'],
-          brand: sake_data['name'],
+          name: sake_data['name'],
           brewery: sake_data['breweryId']
           # prefecture: sake_data['prefecture_name']
         )

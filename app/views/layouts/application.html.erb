@@ -7,24 +7,151 @@
     <%= csp_meta_tag %>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jquery-raty-js@2.8.0/lib/jquery.raty.min.css">
 
     <%= stylesheet_link_tag "application", media: "all", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <!-- CSS (必要であればカスタムスタイルの読み込み) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-raty/2.7.1/jquery.raty.min.css">
   </head>
 
   <body class="bg-black text-silver">
-    <header class="flex justify-between items-center p-4 bg-black text-silver border-b border-silver">
-      <div class="flex-1 text-left">
-        <%= link_to 'SakeApp', root_path, class: 'text-silver no-underline hover:underline' %>
+    <!-- 通常のナビゲーションバー -->
+    <nav class="navbar bg-black border-bottom border-silver">
+      <div class="container-fluid">
+        <a class="navbar-brand text-silver" href="#"><%= link_to 'SakeApp', root_path, class: 'text-silver no-underline hover:underline' %></a>
+        <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="modal" data-bs-target="#menuModal" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav ms-auto d-none d-lg-flex flex-row">
+          <% if user_signed_in? %>
+            <li class="nav-item pe-2">
+              <%= link_to 'マイページ', user_path(current_user), class: 'nav-link  text-silver no-underline hover:underline' %>
+            </li>
+            <li class="nav-item pe-2">
+              <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link text-silver no-underline hover:underline' %>
+            </li>
+          <% else %>
+            <li class="nav-item">
+              <%= link_to 'ログイン', new_user_session_path, class: 'nav-link text-silver no-underline hover:underline' %>
+            </li>
+          <% end %>
+        </ul>
       </div>
-      <div class="flex-1 text-right">
-        <% if user_signed_in? %>
-          <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'text-silver no-underline hover:underline' %>
-        <% else %>
-          <%= link_to 'ログイン', new_user_session_path, class: 'text-silver no-underline hover:underline' %>
-        <% end %>
+    </nav>
+
+    <!-- ハンバーガーメニューのモーダル -->
+    <div class="modal fade" id="menuModal" tabindex="-1" aria-labelledby="menuModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content bg-black text-silver">
+          <div class="modal-header">
+            <h5 class="modal-title" id="menuModalLabel">Menu</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <ul class="navbar-nav ms-auto">
+              <% if user_signed_in? %>
+                <li class="nav-item">
+                  <%= link_to 'マイページ', user_path(current_user), class: 'nav-link  text-silver no-underline hover:underline' %>
+                </li>
+                <li class="nav-item">
+                  <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link text-silver no-underline hover:underline' %>
+                </li>
+              <% else %>
+                <li class="nav-item">
+                  <%= link_to 'ログイン', new_user_session_path, class: 'nav-link text-silver no-underline hover:underline' %>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        </div>
       </div>
-    </header>
+    </div>
+    
     <%= yield %>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+     <!-- jQueryの読み込み -->
+    <script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+
+    <%# チャートjsの読み込み %>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- jQuery Ratyプラグインの読み込み -->
+    <script src="https://cdn.jsdelivr.net/npm/jquery-raty-js@2.8.0/lib/jquery.raty.min.js"></script>
+
+    <%# トグルアイコン %>
+    <script>
+      document.addEventListener('turbo:load', function() {
+        var toggler = document.querySelector('.navbar-toggler');
+        var menuModal = document.getElementById('menuModal');
+
+        if (toggler && menuModal) {
+          toggler.removeEventListener('click', toggleIcon);
+          toggler.addEventListener('click', toggleIcon);
+
+          menuModal.removeEventListener('hidden.bs.modal', resetIcon);
+          menuModal.addEventListener('hidden.bs.modal', resetIcon);
+        }
+
+        function toggleIcon() {
+          this.classList.toggle('open');
+        }
+
+        function resetIcon() {
+          toggler.classList.remove('open');
+        }
+      });
+    </script>
+    <script>
+      // $(document).ready(function() {
+        // 星評価を設定
+        $('#star-rating').raty({
+          size     : 36,
+          starOff:  '<%= asset_path('star-off.png') %>',
+          starOn : '<%= asset_path('star-on.png') %>',
+          starHalf: '<%= asset_path('star-half.png') %>',
+          scoreName: 'review[rating]',
+          half: true,
+          click: function(score) {
+            const roundedScore = (Math.round(score * 2) / 2).toFixed(1); // 0.5刻みに丸める
+            $('#rating-value').val(roundedScore);  // 隠しフィールドに値をセット
+            $('#rating-display').text(roundedScore);  // 表示フィールドに値をセット
+          }
+        });
+    </script>
+    <script>
+        // 数値選択バーの値を表示
+        $('#sweetness-range').on('input', function() {
+          $('#sweetness-value').text($(this).val());
+        });
+        $('#spiciness-range').on('input', function() {
+          $('#spiciness-value').text($(this).val());
+        });
+        $('#lightness-range').on('input', function() {
+          $('#lightness-value').text($(this).val());
+        });
+        $('#richness-range').on('input', function() {
+          $('#richness-value').text($(this).val());
+        });
+
+        // 香りボタンのクリックイベント
+        $('.aroma-button').on('click', function() {
+          $('.aroma-button').removeClass('active');
+          $(this).addClass('active');
+          $('#aroma-value').val($(this).data('value'));
+        });
+      // });
+    </script>
+
+
   </body>
 </html>
+

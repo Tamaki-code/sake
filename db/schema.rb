@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_16_032847) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_22_012818) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -39,10 +39,28 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_16_032847) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "breweries", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "sakenowa_brewery_id"
+    t.integer "region_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["region_id"], name: "index_breweries_on_region_id"
+    t.index ["sakenowa_brewery_id"], name: "index_breweries_on_sakenowa_brewery_id", unique: true
+  end
+
+  create_table "regions", force: :cascade do |t|
+    t.string "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "sakenowaId", null: false
+    t.index ["sakenowaId"], name: "index_regions_on_sakenowaId", unique: true
+  end
+
   create_table "reviews", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "sake_id", null: false
-    t.integer "rating"
+    t.float "rating"
     t.decimal "sweetness"
     t.decimal "spiciness"
     t.decimal "lightness"
@@ -69,12 +87,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_16_032847) do
   end
 
   create_table "sakes", force: :cascade do |t|
-    t.string "sakenowaId"
-    t.string "brand"
-    t.string "brewery"
-    t.string "prefecture"
+    t.integer "sakenowaId"
+    t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "brewery_id"
+    t.index ["sakenowaId"], name: "index_sakes_on_sakenowaId", unique: true
   end
 
   create_table "users", force: :cascade do |t|
@@ -95,7 +113,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_16_032847) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "breweries", "regions"
+  add_foreign_key "breweries", "regions"
   add_foreign_key "reviews", "sakes"
   add_foreign_key "reviews", "users"
   add_foreign_key "sake_reviews", "users"
+  add_foreign_key "sakes", "breweries"
 end

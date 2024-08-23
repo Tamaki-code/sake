@@ -1,0 +1,57 @@
+/* 検索結果の枠スタイル */
+.user-profile-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+}
+
+.user-profile-box {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 800px;
+  margin: 20px;
+}
+
+/* 日本酒のアイテムを横2列に配置 */
+.sakes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.sake-item {
+  /* background-color: #b39059; */
+  background-color: #52360d;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.sake-item a {
+  /* color: #b39059; */
+  color: #fff;
+  text-decoration: none;
+}
+
+.btn-group {
+  display: flex;
+  gap: 10px; /* ボタン間のスペース */
+}
+
+.btn-group .btn {
+  flex: 1;
+  text-align: center;
+  border-radius: 8px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-group .btn i {
+  margin-right: 5px; /* アイコンとテキストの間にスペースを追加 */
+}
