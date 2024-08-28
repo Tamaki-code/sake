@@ -29,6 +29,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: |
           bundle exec rake db:migrate
-          bundle exec rake import_sake_data
-          bundle exec rake import_flavor_data
+          bundle exec rake import:sake_data
+          bundle exec rake import:flavor_data
 
