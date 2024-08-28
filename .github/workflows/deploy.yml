@@ -25,16 +25,10 @@ jobs:
           bundle install --jobs 4 --retry 3
 
       - name: Run Rake tasks
-        run: |
-          bundle exec rake db:migrate
-          bundle exec rake import_data
-          bundle exec rake import_flavor_data
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
-
-      - name: Run migrations
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}  # GitHub SecretsにDATABASE_URLを設定
         run: |
-          bundle exec rails db:migrate
+          bundle exec rake db:migrate
+          bundle exec rake import_sake_data
+          bundle exec rake import_flavor_data
+
