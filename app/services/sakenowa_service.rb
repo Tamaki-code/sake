@@ -13,4 +13,8 @@ class SakenowaService
   def fetch_sakes
     self.class.get('/brands')
   end
+
+  def fetch_flavor_charts
+    self.class.get('/flavor-charts')
+  end
 end

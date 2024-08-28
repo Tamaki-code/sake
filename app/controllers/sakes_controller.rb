@@ -6,6 +6,8 @@ class SakesController < ApplicationController
   def show
     @sake = Sake.find(params[:id])
     @reviews = @sake.reviews
+    @flavor_chart = @sake.flavor_chart
+
   end
 
   def fetch_sake_data # まだ作成していない、仮の状態

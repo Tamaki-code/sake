@@ -10,7 +10,7 @@
          <!-- レーダーチャートを表示するキャンバス -->
         <canvas id="reviewRadarChart-<%= index %>" width="400" height="400"></canvas>
 
-        <p><strong>甘さ:</strong> <%= review.sweetness %></p>
+        <p><strong>華やか:</strong> <%= review.f1 %></p>
         <p><strong>辛さ:</strong> <%= review.spiciness %></p>
         <p><strong>淡白さ:</strong> <%= review.lightness %></p>
         <p><strong>濃醇さ:</strong> <%= review.richness %></p>
@@ -19,7 +19,7 @@
         <p><strong>飲み方:</strong> <%= review.drinking_style %></p>
         <p><strong>合う食事:</strong> <%= review.matching_food %></p>
         <p><strong>コメント:</strong> <%= review.comment %></p>
-        <p><strong>投稿者:</strong> <%= review.user.username %></p> <!-- user.id を username に変更 -->
+        <p><strong>投稿者:</strong> <%= review.user.username %></p> 
 
         <% if review.image.attached? %>
           <%= image_tag review.image, class: 'review-image' %> <!-- @review -> review に修正 -->
@@ -33,7 +33,7 @@
     
     <!-- チャートを描画するスクリプト -->
     <script>
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener('turbo:load', function() {
         var ctx = document.getElementById('reviewRadarChart-<%= index %>').getContext('2d');
         new Chart(ctx, {
           type: 'radar',
@@ -52,12 +52,16 @@
             }]
           },
           options: {
+            responsive: true,
             scale: {
-              ticks: {
-                beginAtZero: true,
                 min: 0,
                 max: 5,
-                stepSize: 0.5
+              ticks: {
+                beginAtZero: true,
+                stepSize: 1,
+                callback: function(value) {
+                  return value.toFixed(1);
+                }
               }
             }
           }
@@ -75,7 +79,7 @@
 
 <div class= "center-container">
   <div class="botton-container">
-    <%= link_to 'レビューを作成する', new_sake_review_path(@sake), class: 'btn btn-custom' %>
+    <%= link_to 'レビューを投稿する', new_sake_review_path(@sake), class: 'btn btn-custom' %>
 
     <div class="return-button mt-4">
       <%= link_to sake_path(@sake), class: 'btn btn-custom btn-circle' do %>

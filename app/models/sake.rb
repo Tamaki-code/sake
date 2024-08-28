@@ -1,5 +1,6 @@
 class Sake < ApplicationRecord
   has_many :reviews
+  has_one :flavor_chart, foreign_key: :sakenowaBrandId, primary_key: :sakenowaId
   belongs_to :brewery
   validates :sakenowaId, presence: true, uniqueness: true
   include HTTParty

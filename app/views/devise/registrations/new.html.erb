@@ -4,8 +4,28 @@
   <%= render "devise/shared/error_messages", resource: resource %>
 
   <div class="field">
+    <%= f.label :username, "ユーザー名" %><br />
+    <%= f.text_field :username, autofocus: true, autocomplete: "username" %>
+  </div>
+
+  <div class="field">
     <%= f.label :email %><br />
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :gender, "性別" %><br />
+    <%= f.select :gender, [['男性'], ['女性'],['その他']], prompt: '選択してください' %>
+  </div>
+
+  <div class="field">
+    <%= f.label :birthdate, "生年月日" %><br />
+    <%= f.date_select :birthdate, start_year: Date.today.year - 100, end_year: Date.today.year %>
+  </div>
+
+  <div class="field">
+    <%= f.label :comment, "コメント" %><br />
+    <%= f.text_area :comment %>
   </div>
 
   <div class="field">

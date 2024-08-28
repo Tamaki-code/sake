@@ -35,45 +35,54 @@
       </div>
 
       <div class="field mt-3">
-        <%= form.label :sweetness, "甘さ" %><br>
-        <span id="sweetness-value">2.5</span>
-        <%= form.range_field :sweetness, step: 0.5, min: 0, max: 5, id: 'sweetness-range' %>
+        <%= form.label :f1, "華やか" %><br>
+        <span id="f1-value">2.5</span>
+        <%= form.range_field :f1, step: 0.5, min: 0, max: 5, id: 'f1-range' %>
 
       </div>
 
       <div class="field mt-3">
-        <%= form.label :spiciness, "辛さ" %><br>
-        <span id="spiciness-value">2.5</span>
-        <%= form.range_field :spiciness, step: 0.5, min: 0, max: 5, id: 'spiciness-range' %>
+        <%= form.label :f2, "芳醇" %><br>
+        <span id="f2-value">2.5</span>
+        <%= form.range_field :f2, step: 0.5, min: 0, max: 5, id: 'f2-range' %>
       </div>
 
       <div class="field mt-3">
-        <%= form.label :lightness, "淡白さ" %><br>
-        <span id="lightness-value">2.5</span>
-        <%= form.range_field :lightness, step: 0.5, min: 0, max: 5, id: 'lightness-range' %>
+        <%= form.label :f3, "重厚" %><br>
+        <span id="f3-value">2.5</span>
+        <%= form.range_field :f3, step: 0.5, min: 0, max: 5, id: 'f3-range' %>
       </div>
 
       <div class="field mt-3">
-        <%= form.label :richness, "濃醇さ" %><br>
-        <span id="richness-value">2.5</span>
-        <%= form.range_field :richness, step: 0.5, min: 0, max: 5, id: 'richness-range' %>
+        <%= form.label :f4, "穏やか" %><br>
+        <span id="f4-value">2.5</span>
+        <%= form.range_field :f4, step: 0.5, min: 0, max: 5, id: 'f4-range' %>
       </div>
 
       <div class="field mt-3">
-        <%= form.label :aroma, "香り" %><br>
-        <button type="button" class="btn btn-outline-success aroma-button" data-value="良い">良い</button>
-        <button type="button" class="btn btn-outline-danger aroma-button" data-value="悪い">悪い</button>
-        <%= form.hidden_field :aroma, id: 'aroma-value' %>
+        <%= form.label :f5, "ドライ" %><br>
+        <span id="f5-value">2.5</span>
+        <%= form.range_field :f5, step: 0.5, min: 0, max: 5, id: 'f5-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f6, "軽快" %><br>
+        <span id="f6-value">2.5</span>
+        <%= form.range_field :f6, step: 0.5, min: 0, max: 5, id: 'f6-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :drinking_style, "飲み方" %><br>
+        <button type="button" class="btn btn-outline-success drinking-style-button" data-value="冷酒">冷酒</button>
+        <button type="button" class="btn btn-outline-success drinking-style-button" data-value="常温">常温</button>
+        <button type="button" class="btn btn-outline-success drinking-style-button" data-value="ぬる燗">ぬる燗</button>
+        <button type="button" class="btn btn-outline-success drinking-style-button" data-value="熱燗">熱燗</button>
+        <%= form.hidden_field :drinking_style, id: 'drinking-style-value' %>
       </div>
 
       <div class="field mt-3">
         <%= form.label :aftertaste, "後味" %><br>
         <%= form.text_field :aftertaste %>
-      </div>
-
-      <div class="field mt-3">
-        <%= form.label :drinking_style, "飲み方" %><br>
-        <%= form.text_field :drinking_style %>
       </div>
 
       <div class="field mt-3">
@@ -97,7 +106,7 @@
       </div>
 
       <div class="actions mt-3">
-        <%= form.submit "レビューを投稿", class: 'btn btn-custom' %>
+        <%= form.submit "投稿", class: 'btn btn-custom' %>
       </div>
     <% end %>
 

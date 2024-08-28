@@ -18,12 +18,13 @@
  *= require users
  *= require sakes 
  *= require reviews
+ *= require home
  */
 
 
  body {
   font-family: 'Helvetica Neue', Arial, sans-serif;
-  background-color: #f5f2eb;
+  /* background-color: #f5f2eb; */
   color: #b39059;
 }
 
@@ -36,7 +37,7 @@ header {
 input[type="text"] {
   border: 1px solid #C0C0C0;
   background-color: #ffffff;
-  color: #C0C0C0;
+  color: #000000;
   border-radius: 4px;
   padding-left: 2.5rem;
 }
@@ -57,7 +58,7 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
 }
 
 .bg-black {

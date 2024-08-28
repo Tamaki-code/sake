@@ -15,6 +15,8 @@
 
     <!-- CSS (必要であればカスタムスタイルの読み込み) -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-raty/2.7.1/jquery.raty.min.css">
+
+
   </head>
 
   <body class="bg-black text-silver">
@@ -114,12 +116,14 @@
       // $(document).ready(function() {
         // 星評価を設定
         $('#star-rating').raty({
-          size     : 36,
+          // size     : 5,
           starOff:  '<%= asset_path('star-off.png') %>',
           starOn : '<%= asset_path('star-on.png') %>',
           starHalf: '<%= asset_path('star-half.png') %>',
           scoreName: 'review[rating]',
           half: true,
+          halfShow: true,  // 半分の星を表示
+          precision: true, // クリック位置に応じて精度を高める
           click: function(score) {
             const roundedScore = (Math.round(score * 2) / 2).toFixed(1); // 0.5刻みに丸める
             $('#rating-value').val(roundedScore);  // 隠しフィールドに値をセット
@@ -129,24 +133,30 @@
     </script>
     <script>
         // 数値選択バーの値を表示
-        $('#sweetness-range').on('input', function() {
-          $('#sweetness-value').text($(this).val());
+        $('#f1-range').on('input', function() {
+          $('#f1-value').text($(this).val());
         });
-        $('#spiciness-range').on('input', function() {
-          $('#spiciness-value').text($(this).val());
+        $('#f2-range').on('input', function() {
+          $('#f2-value').text($(this).val());
         });
-        $('#lightness-range').on('input', function() {
-          $('#lightness-value').text($(this).val());
+        $('#f3-range').on('input', function() {
+          $('#f3-value').text($(this).val());
         });
-        $('#richness-range').on('input', function() {
-          $('#richness-value').text($(this).val());
+        $('#f4-range').on('input', function() {
+          $('#f4-value').text($(this).val());
+        });
+        $('#f5-range').on('input', function() {
+          $('#f5-value').text($(this).val());
+        });
+        $('#f6-range').on('input', function() {
+          $('#f6-value').text($(this).val());
         });
 
         // 香りボタンのクリックイベント
-        $('.aroma-button').on('click', function() {
-          $('.aroma-button').removeClass('active');
+        $('.drinking-style-button').on('click', function() {
+          $('.drinking-style-button').removeClass('active');
           $(this).addClass('active');
-          $('#aroma-value').val($(this).data('value'));
+          $('#drinking-style-value').val($(this).data('value'));
         });
       // });
     </script>

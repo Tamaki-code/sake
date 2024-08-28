@@ -22,7 +22,7 @@
           <% @sakes.each do |sake| %>
             <div class="sake-item">
               <i class="fas fa-glass-whiskey"></i> <!-- 盃アイコン -->
-              <%= link_to sake.name, sake_path(sake, return_to: request.fullpath), class: 'text-silver no-underline hover:underline' %>
+              <%= link_to sake.name, sake_path(sake, return_to: request.fullpath), class: 'text-silver sakebtn no-underline hover:underline' %>
             </div>
           <% end %>
         </div>

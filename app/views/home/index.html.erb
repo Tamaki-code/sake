@@ -1,4 +1,16 @@
-<div class="flex-col min-h-screen bg-black text-silver">
+<style>
+  .home {
+    /* background-image: url('<%= asset_path('30149283_m.jpg') %>'); */
+    background-image: url('<%= asset_path('sake_wood.jpg') %>');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    height: 100vh;
+  }
+</style>
+
+<div class="flex-col min-h-screen text-white home">
   <%# <div class="center-content"> %>
     <h1 class="text-6xl font-bold mb-4 text-center">SakeApp</h1>
     <p class="text-sm mb-8 text-center">「自分の舌を記録する」<br>
@@ -8,7 +20,7 @@
   <div class="search-container">
     <%= form_with url: search_sakes_path, method: :get, local: true do %>
       <div class="input-group">
-        <input type="text" name="query" placeholder="日本酒を検索" class="w-full p-3 pl-10 bg-black text-silver border border-silver rounded-pill">
+        <input type="text" name="query" placeholder="日本酒を検索" class="w-full p-3 pl-10  text-silver border border-silver rounded-pill">
         <button type="submit" class="ms-1">
           <svg class="h-5 w-5 text-silver" fill="currentColor" viewBox="0 0 20 20">
             <path fill-rule="evenodd" d="M12.9 14.32a8 8 0 111.41-1.41l4.39 4.39a1 1 0 01-1.42 1.42l-4.39-4.39zM8 14a6 6 0 100-12 6 6 0 000 12z" clip-rule="evenodd" />
@@ -19,5 +31,5 @@
   </div>
 
 
-  <%# <%= link_to '記録ページへ', sake_review_path, class: 'bg-silver text-black py-2 px-4 rounded hover:bg-gray-700 hover:text-silver transition' %> %>
+  <%# <%= link_to '記録ページへ', sake_review_path, class: 'bg-silver text-black py-2 px-4 rounded hover:bg-gray-700 hover:text-silver transition' %>
 </div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_08_22_012818) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -49,6 +49,18 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_012818) do
     t.index ["sakenowa_brewery_id"], name: "index_breweries_on_sakenowa_brewery_id", unique: true
   end
 
+  create_table "flavor_charts", force: :cascade do |t|
+    t.integer "sakenowaBrandId"
+    t.float "f1"
+    t.float "f2"
+    t.float "f3"
+    t.float "f4"
+    t.float "f5"
+    t.float "f6"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "regions", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -61,10 +73,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_012818) do
     t.integer "user_id", null: false
     t.integer "sake_id", null: false
     t.float "rating"
-    t.decimal "sweetness"
-    t.decimal "spiciness"
-    t.decimal "lightness"
-    t.decimal "richness"
     t.string "aroma"
     t.string "aftertaste"
     t.string "drinking_style"
@@ -73,6 +81,12 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_22_012818) do
     t.date "recorded_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "f1"
+    t.float "f2"
+    t.float "f3"
+    t.float "f4"
+    t.float "f5"
+    t.float "f6"
     t.index ["sake_id"], name: "index_reviews_on_sake_id"
     t.index ["user_id"], name: "index_reviews_on_user_id"
   end
