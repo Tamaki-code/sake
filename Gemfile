@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby "3.0.0"
+ruby "3.1.0"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.5"
@@ -54,6 +54,8 @@ gem 'groupdate' # Chartkickと連携するため
 gem 'devise' # ユーザー認証用
 gem 'mysql2', '>= 0.5.3'
 gem 'jquery-rails'
+gem 'pg', '~> 1.2'
+
 
 
 
