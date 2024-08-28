@@ -55,6 +55,8 @@ gem 'devise' # ユーザー認証用
 gem 'mysql2', '>= 0.5.3'
 gem 'jquery-rails'
 gem 'pg', '~> 1.2', group: :production
+gem 'dotenv-rails', groups: [:development, :test]
+
 
 
 

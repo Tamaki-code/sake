@@ -11,6 +11,9 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -41,8 +44,8 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
 
   create_table "breweries", force: :cascade do |t|
     t.string "name", null: false
-    t.integer "sakenowa_brewery_id"
-    t.integer "region_id", null: false
+    t.string "sakenowa_brewery_id"
+    t.bigint "region_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["region_id"], name: "index_breweries_on_region_id"
@@ -63,15 +66,15 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
 
   create_table "regions", force: :cascade do |t|
     t.string "name", null: false
+    t.string "sakenowaId", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "sakenowaId", null: false
     t.index ["sakenowaId"], name: "index_regions_on_sakenowaId", unique: true
   end
 
   create_table "reviews", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "sake_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "sake_id", null: false
     t.float "rating"
     t.string "aroma"
     t.string "aftertaste"
@@ -92,7 +95,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
   end
 
   create_table "sake_reviews", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "bundle"
     t.string "install"
     t.datetime "created_at", null: false
@@ -101,7 +104,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
   end
 
   create_table "sakes", force: :cascade do |t|
-    t.integer "sakenowaId"
+    t.string "sakenowaId"
     t.string "name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -127,7 +130,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_08_27_030021) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "breweries", "regions"
   add_foreign_key "breweries", "regions"
   add_foreign_key "reviews", "sakes"
   add_foreign_key "reviews", "users"
