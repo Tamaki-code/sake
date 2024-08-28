@@ -1,0 +1,31 @@
+name: Deploy to Render
+
+on:
+  push:
+    branches:
+      - main  # デプロイするブランチを指定します
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.1.0'  # 使用しているRubyのバージョンを指定します
+          bundler-cache: true
+
+      - name: Install dependencies
+        run: |
+          bundle install --jobs 4 --retry 3
+
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}  # GitHub SecretsにDATABASE_URLを設定
+        run: |
+          bundle exec rails db:migrate
