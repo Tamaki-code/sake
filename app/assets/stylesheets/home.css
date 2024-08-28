@@ -1,3 +1,7 @@
 .text-white {
   color: #fff;
 }
+
+.top-btn {
+  background-color: none;
+}

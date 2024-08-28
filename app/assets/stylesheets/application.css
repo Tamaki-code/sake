@@ -141,7 +141,7 @@ a:hover {
 }
 
 .input-group button {
-  background: #f5f2eb;
+  /* background: #f5f2eb; */
   color: #b39059;
   padding: 10px;
   cursor: pointer;
