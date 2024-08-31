@@ -1,2 +1,123 @@
-<h1>Reviews#edit</h1>
-<p>Find me in app/views/reviews/edit.html.erb</p>
+<div class="user-profile-container">
+  <div class="user-profile-box">
+    <h3>レビュー編集</h3>
+    
+    <% if flash[:notice] %>
+      <div class="alert alert-success">
+        <%= flash[:notice] %>
+      </div>
+    <% end %>
+
+    <% if flash[:alert] %>
+      <div class="alert alert-danger">
+        <%= flash[:alert] %>
+      </div>
+    <% end %>
+
+    <% if @review.errors.any? %>
+      <div id="error_explanation">
+        <h2><%= pluralize(@review.errors.count, "error") %> エラーが発生しました</h2>
+        <ul>
+          <% @review.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <h5>銘柄：<%= @sake.name %></h5>
+    
+    <%= form_with(model: [@sake, @review], local: true, method: :patch) do |form| %>
+      <%= form.hidden_field :sake_id, value: @sake.id %>
+
+      <div id="star-rating" class="field mt-3">
+        <%= form.label :rating, "評価" %><br>
+        <span id="rating-display"><%= @review.rating || 0 %></span>
+        <%= form.hidden_field :rating, id: 'rating-value' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f1, "華やか" %><br>
+        <span id="f1-value"><%= @review.f1 || 2.5 %></span>
+        <%= form.range_field :f1, step: 0.5, min: 0, max: 5, id: 'f1-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f2, "芳醇" %><br>
+        <span id="f2-value"><%= @review.f2 || 2.5 %></span>
+        <%= form.range_field :f2, step: 0.5, min: 0, max: 5, id: 'f2-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f3, "重厚" %><br>
+        <span id="f3-value"><%= @review.f3 || 2.5 %></span>
+        <%= form.range_field :f3, step: 0.5, min: 0, max: 5, id: 'f3-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f4, "穏やか" %><br>
+        <span id="f4-value"><%= @review.f4 || 2.5 %></span>
+        <%= form.range_field :f4, step: 0.5, min: 0, max: 5, id: 'f4-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f5, "ドライ" %><br>
+        <span id="f5-value"><%= @review.f5 || 2.5 %></span>
+        <%= form.range_field :f5, step: 0.5, min: 0, max: 5, id: 'f5-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :f6, "軽快" %><br>
+        <span id="f6-value"><%= @review.f6 || 2.5 %></span>
+        <%= form.range_field :f6, step: 0.5, min: 0, max: 5, id: 'f6-range' %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :drinking_style, "飲み方" %><br>
+        <% ["冷酒", "常温", "ぬる燗", "熱燗"].each do |style| %>
+          <button type="button" class="btn btn-outline-success drinking-style-button <%= 'active' if @review.drinking_style == style %>" data-value="<%= style %>"><%= style %></button>
+        <% end %>
+        <%= form.hidden_field :drinking_style, id: 'drinking-style-value', value: @review.drinking_style %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :aftertaste, "後味" %><br>
+        <%= form.text_field :aftertaste, value: @review.aftertaste %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :matching_food, "合う食事" %><br>
+        <%= form.text_field :matching_food, value: @review.matching_food %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :comment, "コメント" %><br>
+        <%= form.text_area :comment, value: @review.comment %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :image, "画像" %><br>
+        <%= form.file_field :image %>
+        <% if @review.image.attached? %>
+          <p>現在の画像:</p>
+          <%= image_tag @review.image, class: 'review-image' %>
+        <% end %>
+      </div>
+
+      <div class="field mt-3">
+        <%= form.label :recorded_at, "記録日" %><br>
+        <%= form.date_select :recorded_at, default: @review.recorded_at %>
+      </div>
+
+      <div class="actions mt-3">
+        <%= form.submit "更新", class: 'btn btn-custom' %>
+      </div>
+    <% end %>
+
+    <div class="return-button mt-4">
+      <%= link_to sake_path(@sake), class: 'btn btn-custom btn-circle' do %>
+        <i class="fas fa-arrow-left"></i>
+      <% end %>
+    </div>
+  </div>
+</div>

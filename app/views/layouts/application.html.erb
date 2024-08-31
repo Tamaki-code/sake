@@ -33,7 +33,11 @@
               <%= link_to 'マイページ', user_path(current_user), class: 'nav-link  text-silver no-underline hover:underline' %>
             </li>
             <li class="nav-item pe-2">
-              <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link text-silver no-underline hover:underline' %>
+              
+              <%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete, confirm: 'ログアウトしますか？' }, class: 'nav-link text-silver no-underline hover:underline' %>
+
+
+
             </li>
           <% else %>
             <li class="nav-item">
@@ -59,7 +63,11 @@
                   <%= link_to 'マイページ', user_path(current_user), class: 'nav-link  text-silver no-underline hover:underline' %>
                 </li>
                 <li class="nav-item">
-                  <%= link_to 'ログアウト', destroy_user_session_path, method: :delete, class: 'nav-link text-silver no-underline hover:underline' %>
+                  <li class="nav-item pe-2">
+                    <%= link_to 'ログアウト', destroy_user_session_path, data: { turbo_method: :delete }, class: 'nav-link text-silver no-underline' %>
+
+                  </li>
+
                 </li>
               <% else %>
                 <li class="nav-item">
@@ -73,8 +81,10 @@
     </div>
     
     <%= yield %>
-    
+  
 
+
+    <%= javascript_importmap_tags %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
      <!-- jQueryの読み込み -->
@@ -160,7 +170,43 @@
         });
       // });
     </script>
+    
+    <!-- ハンバーガーメニューのバックドロップ -->
+    <script>
+      document.addEventListener('turbo:before-cache', function() {
+        var settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+          var modal = bootstrap.Modal.getInstance(settingsModal);
+          if (modal) {
+            modal.hide(); // モーダルを確実に閉じる
+          }
 
+          removeBackdrop(); // バックドロップを削除
+        }
+      });
+
+      document.addEventListener('turbo:load', function() {
+        var settingsModal = document.getElementById('settingsModal');
+        if (settingsModal) {
+          var modal = new bootstrap.Modal(settingsModal);
+
+          // イベントリスナーを削除してから再追加
+          settingsModal.removeEventListener('hidden.bs.modal', handleModalClose);
+          settingsModal.addEventListener('hidden.bs.modal', handleModalClose);
+        }
+
+        function handleModalClose() {
+          removeBackdrop();
+        }
+
+        function removeBackdrop() {
+          var backdrops = document.querySelectorAll('.modal-backdrop');
+          backdrops.forEach(function(backdrop) {
+            backdrop.parentNode.removeChild(backdrop);
+          });
+        }
+      });
+    </script>
 
   </body>
 </html>

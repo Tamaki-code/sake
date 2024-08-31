@@ -1,183 +1,142 @@
 <div class="user-profile-container">
   <div class="user-profile-box">
-    <div class="user-profile-header">
-      <h2>マイページ</h2>
-      <button class="settings-button" data-bs-toggle="modal" data-bs-target="#settingsModal">
-        <i class="fas fa-cog"></i>
-      </button>
+    <h3 class="d-inline-block mb-4">マイページ</h3>
+    
+    <!-- タブのナビゲーション -->
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="true">
+          基本情報
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false">
+          登録したレビュー
+        </button>
+      </li>
+    </ul>
+
+    <!-- タブのコンテンツ -->
+    <div class="tab-content" id="myTabContent">
+      <!-- 基本情報タブ -->
+      <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="user-profile-details mt-4 position-relative">
+          <button class="settings-button position-absolute top-0 end-0" data-bs-toggle="modal" data-bs-target="#settingsModal">
+            <i class="fas fa-cog"></i> <!-- 歯車マークのアイコン -->
+          </button>
+          <p><strong>ユーザー名:</strong> <%= @user.username %></p>
+          <p><strong>性別:</strong> <%= @user.gender %></p>
+          <p><strong>生年月日:</strong> <%= @user.birthdate %></p>
+          <p><strong>コメント:</strong> <%= @user.comment %></p>
+          <p><strong>アカウント作成日:</strong> <%= @user.created_at.strftime("%Y-%m-%d %H:%M") %></p>
+          <p><strong>最終更新日:</strong> <%= @user.updated_at.strftime("%Y-%m-%d %H:%M") %></p>
+        </div>
+      </div>
+
+      <!-- レビュースタブ -->
+      <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+        <div class="center-container mt-4">
+          <% if @user.reviews.any? %>
+            <% @user.reviews.order(created_at: :desc).each_with_index do |review, index| %>
+              <div class="card card-box mt-2 mb-2" data-rating="<%= review.rating %>">
+                <div class="card-header">
+                  <h5 class="card-title"><%= review.sake.name %>のレビュー</h5>
+                  <p class="card-subtitle text-muted">評価: <%= (review.rating * 2).round / 2.0 %></p>
+
+                  <div id="star-rating-<%= index %>" class="star-rating"></div> <!-- 星評価表示領域 -->
+                </div>
+                <div class="card-body">
+                  <canvas id="reviewRadarChart-<%= index %>" width="400" height="400"></canvas>
+                  <p><i class="fas fa-wine-glass-alt"></i> <strong>香り:</strong> <%= review.aroma %></p>
+                  <p><i class="fas fa-tint"></i> <strong>後味:</strong> <%= review.aftertaste %></p>
+                  <p><i class="fas fa-wine-bottle"></i> <strong>飲み方:</strong> <%= review.drinking_style %></p>
+                  <p><i class="fas fa-utensils"></i> <strong>合う食事:</strong> <%= review.matching_food %></p>
+                  <p><i class="fas fa-comment"></i> <strong>コメント:</strong> <%= review.comment %></p>
+                  <% if review.image.attached? %>
+                    <%= image_tag review.image, class: 'img-fluid rounded mt-3' %>
+                  <% end %>
+                </div>
+                <div class="card-footer">
+                  <p class="text-muted">記録日: <%= review.recorded_at.strftime('%Y年%m月%d日') %></p>
+                  <%= link_to '編集', edit_sake_review_path(review.sake, review), class: 'btn btn-sm btn-primary' %>
+                  <%= link_to '削除', sake_review_path(review.sake, review), method: :delete, data: { turbo_method: :delete, confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger' %>
+                </div>
+              </div>
+
+              <!-- チャートと星評価を描画するスクリプト -->
+              <script>
+                document.addEventListener('turbo:load', function() {
+                  // レーダーチャートの描画
+                  var ctx = document.getElementById('reviewRadarChart-<%= index %>').getContext('2d');
+                  new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                      labels: ['華やか', '芳醇', '重厚', '穏やか', 'ドライ', '軽快'],
+                      datasets: [{
+                        label: '<%= review.sake.name %> の味わい',
+                        data: [<%= review.f1 %>, <%= review.f2 %>, <%= review.f3 %>, <%= review.f4 %>, <%= review.f5 %>, <%= review.f6 %>],
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 2,
+                        pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+                      }]
+                    },
+                    options: {
+                      responsive: true,
+                      scale: {
+                          min: 0,
+                          max: 5,
+                        ticks: {
+                          beginAtZero: true,
+                          stepSize: 1,
+                          callback: function(value) {
+                            return value.toFixed(1);
+                          }
+                        }
+                      }
+                    }
+                  });
+
+                  // 星評価の描画
+                  var roundedScore = (Math.round(<%= review.rating %> * 2) / 2).toFixed(1); // 0.5単位に丸める
+                  $('#star-rating-<%= index %>').raty({
+                    readOnly: true,
+                    score: roundedScore, // 丸めた評価値をスコアとして設定
+                    starOff: '<%= asset_path('star-off.png') %>',
+                    starOn: '<%= asset_path('star-on.png') %>',
+                    starHalf: '<%= asset_path('star-half.png') %>',
+                  });
+                });
+              </script>
+            <% end %>
+          <% else %>
+            <div class="no-review-container">
+              <div class="no-review-box">
+                <p class="mt-2 text-center">投稿されたレビューはありません。</p>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
     </div>
-    <div class="user-profile-details">
-      <p><strong>ユーザー名:</strong> <%= @user.username %></p>
-      <p><strong>性別:</strong> <%= @user.gender %></p>
-      <p><strong>生年月日:</strong> <%= @user.birthdate %></p>
-      <p><strong>コメント:</strong> <%= @user.comment %></p>
-      <p><strong>アカウント作成日:</strong> <%= @user.created_at.strftime("%Y-%m-%d %H:%M") %></p>
-      <p><strong>最終更新日:</strong> <%= @user.updated_at.strftime("%Y-%m-%d %H:%M") %></p>
-      <p>投稿したレビュー一覧を見るボタンを作成</p>
+
+    <!-- 設定ボタンをクリックしたときに表示されるモーダル -->
+    <div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="settingsModalLabel">設定</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <%= link_to '編集', edit_user_registration_path, class: 'btn btn-custom' %>
+          </div>
+        </div>
+      </div>
     </div>
+
   </div>
 </div>
-
-<!-- 設定ボタンをクリックしたときに表示されるモーダル -->
-<div class="modal fade" id="settingsModal" tabindex="-1" aria-labelledby="settingsModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="settingsModalLabel">設定</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <%= link_to '編集', edit_user_registration_path, class: 'btn btn-custom' %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  document.addEventListener('turbo:before-cache', function() {
-    var settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      var modal = bootstrap.Modal.getInstance(settingsModal);
-      if (modal) {
-        modal.hide(); // モーダルを確実に閉じる
-      }
-
-      removeBackdrop(); // バックドロップを削除
-    }
-  });
-
-  document.addEventListener('turbo:load', function() {
-    var settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      var modal = new bootstrap.Modal(settingsModal);
-
-      // イベントリスナーを削除してから再追加
-      settingsModal.removeEventListener('hidden.bs.modal', handleModalClose);
-      settingsModal.addEventListener('hidden.bs.modal', handleModalClose);
-    }
-
-    function handleModalClose() {
-      removeBackdrop();
-    }
-
-    function removeBackdrop() {
-      var backdrops = document.querySelectorAll('.modal-backdrop');
-      backdrops.forEach(function(backdrop) {
-        backdrop.parentNode.removeChild(backdrop);
-      });
-    }
-  });
-</script>
-
-<%# <script>
-  document.addEventListener('turbo:load', function() {
-    var settingsModal = document.getElementById('settingsModal');
-
-    if (settingsModal) {
-      var modal = new bootstrap.Modal(settingsModal);
-
-      // モーダルが開いている場合は閉じる
-      if (settingsModal.classList.contains('show')) {
-        modal.hide();
-      }
-
-      // イベントリスナーを追加する前に確実に削除
-      settingsModal.removeEventListener('hidden.bs.modal', handleModalClose);
-      settingsModal.addEventListener('hidden.bs.modal', handleModalClose);
-    }
-  });
-
-  window.addEventListener('popstate', function() {
-    var settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      var modal = bootstrap.Modal.getInstance(settingsModal);
-      if (modal) {
-        modal.hide();
-        removeBackdrop();
-      }
-    }
-  });
-
-  document.addEventListener('turbo:before-cache', function() {
-    var settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      var modal = bootstrap.Modal.getInstance(settingsModal);
-      if (modal) {
-        modal.hide();
-        removeBackdrop();
-      }
-    }
-  });
-
-  function handleModalClose() {
-    removeBackdrop();
-  }
-
-  function removeBackdrop() {
-    var backdrops = document.querySelectorAll('.modal-backdrop');
-    backdrops.forEach(function(backdrop) {
-      backdrop.parentNode.removeChild(backdrop);
-    });
-  }
-</script> %>
-
-<%# <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var settingsModal = document.getElementById('settingsModal');
-
-    // イベントリスナーを削除してから追加
-    settingsModal.removeEventListener('hidden.bs.modal', handleModalClose);
-    settingsModal.addEventListener('hidden.bs.modal', handleModalClose);
-
-    // モーダルが存在する場合のみ処理を行う
-    if (settingsModal) {
-      var modal = new bootstrap.Modal(settingsModal);
-
-      // モーダルが開いている場合は閉じる
-      if (settingsModal.classList.contains('show')) {
-        modal.hide();
-      }
-    }
-  });
-
-  window.addEventListener('popstate', function() {
-    var settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      var modal = bootstrap.Modal.getInstance(settingsModal);
-      if (modal) {
-        modal.hide();
-        // バックドロップが残っている場合は削除
-        removeBackdrop();
-      }
-    }
-  });
-
-  // Turboがキャッシュする前にモーダルを閉じる
-  document.addEventListener('turbo:before-cache', function() {
-    var settingsModal = document.getElementById('settingsModal');
-    if (settingsModal) {
-      var modal = bootstrap.Modal.getInstance(settingsModal);
-      if (modal) {
-        modal.hide();
-        // バックドロップが残っている場合は削除
-        removeBackdrop();
-      }
-    }
-  });
-
-  function handleModalClose() {
-    // ここでバックドロップなどの処理を行う
-    removeBackdrop();
-  }
-
-  function removeBackdrop() {
-    var backdrops = document.querySelectorAll('.modal-backdrop');
-    backdrops.forEach(function(backdrop) {
-      backdrop.parentNode.removeChild(backdrop);
-    });
-  }
-</script> %>
-
-
-
-

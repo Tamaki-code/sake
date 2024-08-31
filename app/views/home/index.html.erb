@@ -10,6 +10,18 @@
 </style>
 
 <div class="flex-col min-h-screen text-white home">
+  <% if flash[:notice] %>
+    <div class="alert alert-success">
+      <%= flash[:notice] %>
+    </div>
+  <% end %>
+
+  <% if flash[:alert] %>
+    <div class="alert alert-danger">
+      <%= flash[:alert] %>
+    </div>
+  <% end %>
+  
   <%# <div class="center-content"> %>
     <h1 class="text-6xl font-bold pt-4 mb-4 text-center">SakeApp</h1>
     <p class="text-sm mb-8 text-center">「自分の舌を記録する」<br>

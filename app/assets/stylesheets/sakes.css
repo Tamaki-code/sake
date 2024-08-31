@@ -37,11 +37,6 @@
   text-decoration: none;
 }
 
-.btn-group {
-  display: flex;
-  gap: 10px; /* ボタン間のスペース */
-}
-
 .btn-group .btn {
   flex: 1;
   text-align: center;

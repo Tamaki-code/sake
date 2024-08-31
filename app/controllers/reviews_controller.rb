@@ -47,9 +47,11 @@ class ReviewsController < ApplicationController
   def update
     @review = current_user.reviews.find(params[:id])
     if @review.update(review_params)
-      redirect_to @sake, notice: 'レビューが更新されました。'
+      redirect_to sake_reviews_path(@sake), notice: 'レビューが更新されました。'
+      # redirect_to @sake, notice: 'レビューが更新されました。'
     else
-      render :edit
+      flash.now[:alert] = "更新に失敗しました"
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -66,6 +68,6 @@ class ReviewsController < ApplicationController
   end
 
   def review_params
-    params.require(:review).permit(:sake_id, :rating, :sweetness, :spiciness, :lightness, :richness, :aroma, :aftertaste, :drinking_style, :matching_food, :comment, :image, :recorded_at)
+    params.require(:review).permit(:sake_id, :rating, :f1, :f2, :f3, :f4, :f5, :f6, :aroma, :aftertaste, :drinking_style, :matching_food, :comment, :image, :recorded_at)
   end
 end

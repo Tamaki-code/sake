@@ -1,86 +1,109 @@
 <h3 class="mt-2 text-center">レビュー 一覧</h3>
 <h4 class="mt-2 text-center"><%= @sake.name %> </h4>
 
-<% if @reviews.any? %>
-  <% @reviews.each_with_index do |review, index| %>
-    <div class="user-profile-container"> <!-- マイページと同じ枠 -->
-      <div class="user-profile-box"> <!-- 枠のスタイルを適用 -->
-        <p><strong>評価:</strong> <%= review.rating %></p>
-
-         <!-- レーダーチャートを表示するキャンバス -->
-        <canvas id="reviewRadarChart-<%= index %>" width="400" height="400"></canvas>
-
-        <p><strong>華やか:</strong> <%= review.f1 %></p>
-        <p><strong>辛さ:</strong> <%= review.spiciness %></p>
-        <p><strong>淡白さ:</strong> <%= review.lightness %></p>
-        <p><strong>濃醇さ:</strong> <%= review.richness %></p>
-        <p><strong>香り:</strong> <%= review.aroma %></p>
-        <p><strong>後味:</strong> <%= review.aftertaste %></p>
-        <p><strong>飲み方:</strong> <%= review.drinking_style %></p>
-        <p><strong>合う食事:</strong> <%= review.matching_food %></p>
-        <p><strong>コメント:</strong> <%= review.comment %></p>
-        <p><strong>投稿者:</strong> <%= review.user.username %></p> 
-
-        <% if review.image.attached? %>
-          <%= image_tag review.image, class: 'review-image' %> <!-- @review -> review に修正 -->
-        <% else %>
-          <p>画像がありません。</p>
-        <% end %>
-
-        <p><strong>記録日:</strong> <%= review.recorded_at %></p>
-      </div>
-    </div>
-    
-    <!-- チャートを描画するスクリプト -->
-    <script>
-      document.addEventListener('turbo:load', function() {
-        var ctx = document.getElementById('reviewRadarChart-<%= index %>').getContext('2d');
-        new Chart(ctx, {
-          type: 'radar',
-          data: {
-            labels: ['甘さ', '辛さ', '淡白さ', '濃醇さ'],
-            datasets: [{
-              label: '<%= @sake.name %> の味わい',
-              data: [<%= review.sweetness %>, <%= review.spiciness %>, <%= review.lightness %>, <%= review.richness %>],
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              borderColor: 'rgba(75, 192, 192, 1)',
-              borderWidth: 2,
-              pointBackgroundColor: 'rgba(75, 192, 192, 1)',
-              pointBorderColor: '#fff',
-              pointHoverBackgroundColor: '#fff',
-              pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
-            }]
-          },
-          options: {
-            responsive: true,
-            scale: {
-                min: 0,
-                max: 5,
-              ticks: {
-                beginAtZero: true,
-                stepSize: 1,
-                callback: function(value) {
-                  return value.toFixed(1);
-                }
-              }
-            }
-          }
-        });
-      });
-    </script>
-  <% end %>
-<% else %>
-  <div class="no-review-container">
-    <div class="no-review-box">
-      <p class="mt-2 text-center">この銘柄に関するレビューはまだありません。</p>
-    </div>
+<% if flash[:notice] %>
+  <div class="alert alert-success notice-box">
+    <%= flash[:notice] %>
+  </div>
+<% end %>
+<% if flash[:alert] %>
+  <div class="alert alert-danger notice-box">
+    <%= flash[:alert] %>
   </div>
 <% end %>
 
-<div class= "center-container">
-  <div class="botton-container">
-    <%= link_to 'レビューを投稿する', new_sake_review_path(@sake), class: 'btn btn-custom' %>
+<div class="center-container">
+  <% if @reviews.any? %>
+    <% @reviews.each_with_index do |review, index| %>
+      <div class="card card-box mt-2 mb-2" data-rating="<%= review.rating %>">
+        <div class="card-header">
+          <h5 class="card-title"><%= review.user.username %>のレビュー</h5>
+          <p class="card-subtitle text-muted">
+            評価: <%= (review.rating * 2).round / 2.0 %>
+          </p>
+          <div id="star-rating-<%= index %>" class="star-rating"></div> <!-- 星評価表示領域 -->
+        </div>
+        <div class="card-body">
+          <canvas id="reviewRadarChart-<%= index %>" width="400" height="400"></canvas>
+          <p><i class="fas fa-wine-glass-alt"></i> <strong>香り:</strong> <%= review.aroma %></p>
+          <p><i class="fas fa-tint"></i> <strong>後味:</strong> <%= review.aftertaste %></p>
+          <p><i class="fas fa-wine-bottle"></i> <strong>飲み方:</strong> <%= review.drinking_style %></p>
+          <p><i class="fas fa-utensils"></i> <strong>合う食事:</strong> <%= review.matching_food %></p>
+          <p><i class="fas fa-comment"></i> <strong>コメント:</strong> <%= review.comment %></p>
+          <% if review.image.attached? %>
+            <%= image_tag review.image, class: 'img-fluid rounded mt-3' %>
+          <% end %>
+        </div>
+        <div class="card-footer">
+          <p class="text-muted">記録日: <%= review.recorded_at.strftime('%Y年%m月%d日') %></p>
+          <% if review.user == current_user %>
+            <%= link_to '編集', edit_sake_review_path(@sake, review), class: 'btn btn-sm btn-primary' %>
+            <%= link_to '削除', sake_review_path(@sake, review), method: :delete, data: { turbo_method: :delete, confirm: '本当に削除しますか？' }, class: 'btn btn-sm btn-danger' %>
+          <% end %>
+        </div>
+      </div>
+      
+      <!-- チャートと星評価を描画するスクリプト -->
+      <script>
+        document.addEventListener('turbo:load', function() {
+          // レーダーチャートの描画
+          var ctx = document.getElementById('reviewRadarChart-<%= index %>').getContext('2d');
+          new Chart(ctx, {
+            type: 'radar',
+            data: {
+              labels: ['華やか', '芳醇', '重厚', '穏やか', 'ドライ', '軽快'],
+              datasets: [{
+                label: '<%= @sake.name %> の味わい',
+                data: [<%= review.f1 %>, <%= review.f2 %>, <%= review.f3 %>, <%= review.f4 %>, <%= review.f5 %>, <%= review.f6 %>],
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 2,
+                pointBackgroundColor: 'rgba(75, 192, 192, 1)',
+                pointBorderColor: '#fff',
+                pointHoverBackgroundColor: '#fff',
+                pointHoverBorderColor: 'rgba(75, 192, 192, 1)'
+              }]
+            },
+            options: {
+              responsive: true,
+              scale: {
+                  min: 0,
+                  max: 5,
+                ticks: {
+                  beginAtZero: true,
+                  stepSize: 1,
+                  callback: function(value) {
+                    return value.toFixed(1);
+                  }
+                }
+              }
+            }
+          });
 
+          // 星評価の描画
+          var roundedScore = (Math.round(<%= review.rating %> * 2) / 2).toFixed(1); // 0.5単位に丸める
+          $('#star-rating-<%= index %>').raty({
+            readOnly: true,
+            score: roundedScore, // 丸めた評価値をスコアとして設定
+            starOff: '<%= asset_path('star-off.png') %>',
+            starOn: '<%= asset_path('star-on.png') %>',
+            starHalf: '<%= asset_path('star-half.png') %>',
+          });
+        });
+      </script>
+    <% end %>
+  <% else %>
+    <div class="no-review-container">
+      <div class="no-review-box">
+        <p class="mt-2 text-center">この銘柄に関するレビューはまだありません。</p>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="center-container">
+  <div class="button-container">
+    <%= link_to 'レビューを投稿する', new_sake_review_path(@sake), class: 'btn btn-custom' %>
     <div class="return-button mt-4">
       <%= link_to sake_path(@sake), class: 'btn btn-custom btn-circle' do %>
         <i class="fas fa-arrow-left"></i>
